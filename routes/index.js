@@ -75,7 +75,7 @@ router.post('/posts/:post/comments', auth, function(req, res, next){
 	var comment = new Comment(req.body);
 	comment.post = req.post;
 	comment.author = req.payload.username;
-	
+
 	comment.save(function(err, comment){
 		if(err){return next(err);}
 
@@ -116,7 +116,7 @@ router.post('/login', function(req, res, next){
 	if(!req.body.username || !req.body.password){
 	  return res.status(400).json({message: 'Please fill out all fields'});
 	}
-
+	console.log('callingpassport')
 	passport.authenticate('local', function(err, user, info){
 	  if(err){ return next(err); }
 

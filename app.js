@@ -10,9 +10,13 @@ var mongoose = require('mongoose');
 require('./models/Posts');
 require('./models/Comments');
 require('./models/Users');
-mongoose.connect('mongodb://localhost/news');
+
+var uristring = process.env.MONGODB_URI || 'mongodb://localhost/news';
+mongoose.connect(uristring);
 
 var passport = require('passport');
+require('./config/passport');
+
 
 var index = require('./routes/index');
 var users = require('./routes/users');
