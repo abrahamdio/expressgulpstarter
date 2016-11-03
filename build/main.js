@@ -36373,7 +36373,7 @@ _angular2.default.bootstrap(document, ['app'], {
   strictDi: true
 });
 
-},{"./article":7,"./auth":10,"./components":11,"./config/app.config":14,"./config/app.constants":15,"./config/app.run":16,"./config/app.templates":17,"./home":20,"./layout":23,"./profile":24,"./services":27,"angular":3,"angular-ui-router":1}],5:[function(require,module,exports){
+},{"./article":7,"./auth":10,"./components":11,"./config/app.config":14,"./config/app.constants":15,"./config/app.run":16,"./config/app.templates":17,"./home":20,"./layout":23,"./profile":24,"./services":28,"angular":3,"angular-ui-router":1}],5:[function(require,module,exports){
 'use strict';
 
 ArticleConfig.$inject = ["$stateProvider"];
@@ -36484,29 +36484,41 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var AuthCtrl = function () {
-	AuthCtrl.$inject = ["User", "$state"];
-	function AuthCtrl(User, $state) {
+	AuthCtrl.$inject = ["Auth", "$state"];
+	function AuthCtrl(Auth, $state) {
 		'ngInject';
 
 		_classCallCheck(this, AuthCtrl);
 
-		this._User = User;
+		this._Auth = Auth;
+		this._$state = $state;
+		this.user = {};
+
 		this.title = $state.current.title;
 		this.authType = $state.current.name.replace('app.', '');
+		this.errors = "";
 	}
 
 	_createClass(AuthCtrl, [{
-		key: 'submitForm',
-		value: function submitForm() {
+		key: 'register',
+		value: function register() {
 			var _this = this;
 
-			this.isSubmitting = true;
-			this._User.attemptAuth(this.authType, this.formData).then(function (res) {
-				_this.isSubmitting = false;
-				console.log(res);
+			this._Auth.register(this.user).then(function (res) {
+				_this._$state.go('app.home');
 			}, function (err) {
-				_this.isSubmitting = false;
-				_this.errors = err.data.errors;
+				_this.errors = err.data.message;
+			});
+		}
+	}, {
+		key: 'logIn',
+		value: function logIn() {
+			var _this2 = this;
+
+			this._Auth.logIn(this.user).then(function (res) {
+				_this2._$state.go('app.home');
+			}, function (err) {
+				_this2.errors = err.data.message;
 			});
 		}
 	}]);
@@ -36665,9 +36677,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 var AppConstants = {
-  api: 'http://localhost:3000/api',
+  api: 'http://localhost:3000',
   jwtKey: 'jwtToken',
-  appName: 'Conduit'
+  appName: 'FlapperNews'
 };
 
 exports.default = AppConstants;
@@ -36706,12 +36718,12 @@ exports.default = AppRun;
 
 angular.module("templates", []).run(["$templateCache", function ($templateCache) {
   $templateCache.put("article/article.html", "<div class=\"article-page\">\n\n  <!-- Banner for article title, action buttons -->\n  <div class=\"banner\">\n    <div class=\"container\">\n\n      <h1>Example article title</h1>\n\n      <div class=\"article-meta\">\n        <!-- Show author info + favorite & follow buttons -->\n        <div class=\"article-meta\">\n          <a href=\"\"><img /></a>\n          <div class=\"info\">\n            <a href=\"\" class=\"author\">Brad Green</a>\n            <span class=\"date\">January 20th</span>\n          </div>\n\n          <button class=\"btn btn-sm btn-outline-secondary\">\n            <i class=\"ion-plus-round\"></i>\n            &nbsp;\n            Follow Brad Green\n          </button>\n          &nbsp;\n          <button class=\"btn btn-sm btn-outline-primary\">\n            <i class=\"ion-heart\"></i>\n            &nbsp;\n            Favorite Article <span class=\"counter\">(29)</span>\n          </button>\n        </div>\n      </div>\n\n    </div>\n  </div>\n\n\n\n  <!-- Main view. Contains article html and comments -->\n  <div class=\"container page\">\n\n    <!-- Article\'s HTML & tags rendered here -->\n    <div class=\"row article-content\">\n      <div class=\"col-xs-12\">\n\n        <div>\n          <p>This is the content of our article.</p>\n        </div>\n\n        <ul class=\"tag-list\">\n          <li class=\"tag-default tag-pill tag-outline\">\n            Tag One\n          </li>\n          <li class=\"tag-default tag-pill tag-outline\">\n            Tag Two\n          </li>\n        </ul>\n\n      </div>\n    </div>\n\n    <hr />\n\n    <div class=\"article-actions\">\n\n      <!-- Show author info + favorite & follow buttons -->\n      <div class=\"article-meta\">\n        <a href=\"\"><img /></a>\n        <div class=\"info\">\n          <a href=\"\" class=\"author\">Brad Green</a>\n          <span class=\"date\">January 20th</span>\n        </div>\n\n        <button class=\"btn btn-sm btn-outline-secondary\">\n          <i class=\"ion-plus-round\"></i>\n          &nbsp;\n          Follow Brad Green\n        </button>\n        &nbsp;\n        <button class=\"btn btn-sm btn-outline-primary\">\n          <i class=\"ion-heart\"></i>\n          &nbsp;\n          Favorite Article <span class=\"counter\">(29)</span>\n        </button>\n      </div>\n\n    </div>\n\n    <!-- Comments section -->\n    <div class=\"row\">\n      <div class=\"col-xs-12 col-md-8 offset-md-2\">\n\n        <div>\n          <form class=\"card comment-form\">\n            <div class=\"card-block\">\n              <textarea class=\"form-control\"\n                placeholder=\"Write a comment...\"\n                rows=\"3\"></textarea>\n            </div>\n            <div class=\"card-footer\">\n              <img class=\"comment-author-img\" />\n              <button class=\"btn btn-sm btn-primary\" type=\"submit\">\n               Post Comment\n              </button>\n            </div>\n          </form>\n        </div>\n\n        <div class=\"card\">\n          <div class=\"card-block\">\n            <p class=\"card-text\">This is an example comment.</p>\n          </div>\n          <div class=\"card-footer\">\n            <a class=\"comment-author\" href=\"\">\n              <img class=\"comment-author-img\" />\n            </a>\n            &nbsp;\n            <a class=\"comment-author\" href=\"\">\n              BradGreen\n            </a>\n            <span class=\"date-posted\">\n              Jan 20, 2016\n            </span>\n          </div>\n        </div>\n\n\n      </div>\n    </div>\n\n  </div>\n\n\n\n</div>\n");
-  $templateCache.put("auth/auth.html", "<div class=\"auth-page\">\n  <div class=\"container page\">\n    <div class=\"row\">\n\n      <div class=\"col-md-6 offset-md-3 col-xs-12\">\n        <h1 class=\"text-xs-center\" ng-bind=\"::$ctrl.title\"></h1>\n        <p class=\"text-xs-center\">\n          <a ui-sref=\"app.login\"\n            ng-show=\"$ctrl.authType === \'register\'\">\n            Have an account?\n          </a>\n          <a ui-sref=\"app.register\"\n            ng-show=\"$ctrl.authType === \'login\'\">\n            Need an account?\n          </a>\n        </p>\n        \n        <list-errors errors=\"$ctrl.errors\"></list-errors>\n        \n        <form ng-submit=\"$ctrl.submitForm()\">\n          <fieldset>\n\n            <fieldset class=\"form-group\" ng-show=\"$ctrl.authType === \'register\'\">\n              <input class=\"form-control form-control-lg\"\n                type=\"text\"\n                placeholder=\"Username\"\n                ng-model=\"$ctrl.formData.username\" />\n            </fieldset>\n\n            <fieldset class=\"form-group\">\n              <input class=\"form-control form-control-lg\"\n                type=\"email\"\n                placeholder=\"Email\"\n                ng-model=\"$ctrl.formData.email\" />\n            </fieldset>\n\n            <fieldset class=\"form-group\">\n              <input class=\"form-control form-control-lg\"\n                type=\"password\"\n                placeholder=\"Password\"\n                ng-model=\"$ctrl.formData.password\" />\n            </fieldset>\n\n            <button class=\"btn btn-lg btn-primary pull-xs-right\"\n              ng-bind=\"$ctrl.title\">\n              Register\n            </button>\n\n          </fieldset>\n        </form>\n      </div>\n\n    </div>\n  </div>\n</div>");
+  $templateCache.put("auth/auth.html", "<div class=\"auth-page\">\n  <div class=\"container page\">\n    <div class=\"row\">\n\n      <div class=\"col-md-6 offset-md-3 col-xs-12\">\n        <h1 class=\"text-xs-center\" ng-bind=\"::$ctrl.title\"></h1>\n        <p class=\"text-xs-center\">\n          <a ui-sref=\"app.login\"\n            ng-show=\"$ctrl.authType === \'register\'\">\n            Have an account?\n          </a>\n          <a ui-sref=\"app.register\"\n            ng-show=\"$ctrl.authType === \'login\'\">\n            Need an account?\n          </a>\n        </p>\n        \n        <div ng-show=\"$ctrl.errors\" class=\"alert alert-danger row\">\n          <span>{{ $ctrl.errors }}</span>\n        </div>\n\n        <form ng-submit=\"$ctrl.register()\"\n          ng-show=\"$ctrl.authType === \'register\'\"\n          style=\"margin-top:30px;\">\n          <h3>{{ $ctrl.title }}</h3>\n\n          <div class=\"form-group\">\n            <input type=\"text\"\n            class=\"form-control\"\n            placeholder=\"Username\"\n            ng-model=\"$ctrl.user.username\"></input>\n          </div>\n          <div class=\"form-group\">\n            <input type=\"password\"\n            class=\"form-control\"\n            placeholder=\"Password\"\n            ng-model=\"$ctrl.user.password\"></input>\n          </div>\n          <button type=\"submit\" class=\"btn btn-primary\">Register</button>\n        </form>\n\n        <form ng-submit=\"$ctrl.logIn()\"\n          ng-show=\"$ctrl.authType === \'login\'\"\n          style=\"margin-top:30px;\">\n          <h3>{{ $ctrl.title }}</h3>\n\n          <div class=\"form-group\">\n            <input type=\"text\"\n            class=\"form-control\"\n            placeholder=\"Username\"\n            ng-model=\"$ctrl.user.username\"></input>\n          </div>\n          <div class=\"form-group\">\n            <input type=\"password\"\n            class=\"form-control\"\n            placeholder=\"Password\"\n            ng-model=\"$ctrl.user.password\"></input>\n          </div>\n          <button type=\"submit\" class=\"btn btn-primary\">Log In</button>\n        </form>\n        \n      </div>\n\n    </div>\n  </div>\n</div>");
   $templateCache.put("components/list-errors.html", "<ul class=\"error-messages\" ng-show=\"$ctrl.errors\">\n  <div ng-repeat=\"(field, errors) in $ctrl.errors\">\n    <li ng-repeat=\"error in errors\">\n      {{field}} {{error}}\n    </li>\n  </div>\n</ul>");
-  $templateCache.put("home/home.html", " <div class=\"home-page\">\n\n  <!-- Splash banner that only shows when not logged in -->\n  <div class=\"banner\" show-authed=\"false\">\n    <div class=\"container\">\n      <h1 class=\"logo-font\" ng-bind=\"::$ctrl.appName | lowercase\"></h1>\n      <p>A place to share your knowledge.</p>\n    </div>\n  </div>\n\n  <div class=\"container page\">\n    <div class=\"row\">\n\n\n      <!-- Main view - contains tabs & article list -->\n      <div class=\"col-md-9\">\n        <!-- Tabs for toggling between feed, article lists -->\n        <div class=\"feed-toggle\">\n          <ul class=\"nav nav-pills outline-active\">\n\n            <li class=\"nav-item\" show-authed=\"true\">\n              <a href=\"\" class=\"nav-link active\">\n                Your Feed\n              </a>\n            </li>\n\n            <li class=\"nav-item\">\n              <a href=\"\" class=\"nav-link\">\n                Global Feed\n              </a>\n            </li>\n\n          </ul>\n        </div>\n\n        <!-- List the current articles -->\n        <div class=\"article-preview\">\n          <div class=\"article-meta\">\n            <a href=\"\"><img /></a>\n            <div class=\"info\">\n              <a href=\"\" class=\"author\">BradGreen</a>\n              <span class=\"date\">January 20th</span>\n            </div>\n            <button class=\"btn btn-outline-primary btn-sm pull-xs-right\">\n              <i class=\"ion-heart\"></i> 29\n            </button>\n          </div>\n          <a href=\"\" class=\"preview-link\">\n            <h1>How to build Angular apps that scale</h1>\n            <p>Building web applications is not an easy task. It\'s even hard to make ones that scale.</p>\n            <span>Read more...</span>\n            <ul class=\"tag-list\">\n              <li class=\"tag-default tag-pill tag-outline\">programming</li>\n              <li class=\"tag-default tag-pill tag-outline\">web</li>\n            </ul>\n          </a>\n        </div>\n\n      </div>\n\n      <!-- Sidebar where popular tags are listed -->\n      <div class=\"col-md-3\">\n        <div class=\"sidebar\">\n\n          <p>Popular Tags</p>\n\n          <div class=\"tag-list\">\n            <a href=\"\" class=\"tag-default tag-pill\">\n              Tag One\n            </a>\n            <a href=\"\" class=\"tag-default tag-pill\">\n              Tag Two\n            </a>\n          </div>\n\n        </div>\n      </div>\n\n      <!-- End the row & container divs -->\n    </div>\n  </div>\n\n</div>\n");
+  $templateCache.put("home/home.html", "<div class=\"page-header\">\n    <h1>Flapper News</h1>\n    {{$ctrl.posts}}\n    <h3>{{$ctrl.isLoggedIn}}</h3>\n</div>\n\n<div ng-repeat=\"post in $ctrl.posts | orderBy:\'-upvotes\'\">\n    <button ng-click=\"$ctrl.incrementUpvotes(post)\">^</button>\n    {{post.upvotes}}\n    <span style=\"font-size:20px; margin-left:10px;\">\n        <a ng-show=\"post.link\" href=\"{{post.link}}\">\n            {{post.title}}\n        </a>\n        <span ng-hide=\"post.link\">\n            {{post.title}}\n        </span>\n    </span>\n    <span>\n        <a href=\"#/posts/{{post._id}}\">Comments</a>\n    </span>\n    <span ng-show=\"post.author\">\n        posted by <a>{{post.author}}</a> |\n    </span>\n</div>\n<form ng-submit=\"$ctrl.addPost()\" ng-show=\"$ctrl.isLoggedIn\" style=\"margin-top:30px;\">\n    <h3>Add a new post</h3>\n\n    <div class=\"form-group\">\n        <input type=\"text\"\n            class=\"form-control\"\n            placeholder=\"Title\"\n            ng-model=\"$ctrl.formData.title\" />\n    </div>\n    <div class=\"form-group\">\n        <input type=\"text\"\n        class=\"form-control\"\n        placeholder=\"Link\"\n        ng-model=\"$ctrl.formData.link\" />\n    </div>\n    <button type=\"submit\" class=\"btn btn-primary\">Post</button>\n</form>\n<div ng-hide=\"$ctrl.isLoggedIn\">\n    <h3>You need to <a ui-sref=\"app.login\">Log In</a> or <a ui-sref=\"app.register\">Register</a> before you can add / upvote a post.</h3>\n</div>\n");
   $templateCache.put("layout/app-view.html", "<app-header></app-header>\n\n<div ui-view></div>\n\n<app-footer></app-footer>\n");
   $templateCache.put("layout/footer.html", "<footer>\n  <div class=\"container\">\n    <a class=\"logo-font\" ui-sref=\"app.home\" ng-bind=\"::$ctrl.appName | lowercase\"></a>\n    <span class=\"attribution\">\n      &copy; {{::$ctrl.date | date:\'yyyy\'}}.\n      An interactive learning project from <a href=\"https://thinkster.io\">Thinkster</a>.\n      Code licensed under MIT.\n    </span>\n  </div>\n</footer>\n");
-  $templateCache.put("layout/header.html", "<nav class=\"navbar navbar-light\">\n  <div class=\"container\">\n\n    <a class=\"navbar-brand\"\n      ui-sref=\"app.home\"\n      ng-bind=\"::$ctrl.appName | lowercase\">\n    </a>\n\n    <!-- Show this for logged out users -->\n    <ul class=\"nav navbar-nav pull-xs-right\"\n      show-authed=\"false\">\n\n      <li class=\"nav-item\">\n        <a class=\"nav-link\"\n          ui-sref-active=\"active\"\n          ui-sref=\"app.home\">\n          Home\n        </a>\n      </li>\n\n      <li class=\"nav-item\">\n        <a class=\"nav-link\"\n          ui-sref-active=\"active\"\n          ui-sref=\"app.login\">\n          Sign In\n        </a>\n      </li>\n\n      <li class=\"nav-item\">\n        <a class=\"nav-link\"\n          ui-sref-active=\"active\"\n          ui-sref=\"app.register\">\n          Sign Up\n        </a>\n      </li>\n    </ul>\n\n    <!-- show this forl logged in user -->\n    <ul class=\"nav navbar-nav pull-xs-right\"\n      show-authed=\"true\">\n      <li class=\"nav-item\">\n        <a class=\"nav-link\"\n          ui-sref-active=\"active\"\n          ui-sref=\"app.home\">\n          Home\n        </a>\n      </li>\n\n      <li class=\"nav-item\">\n        <a class=\"nav-link\"\n          ui-sref-active=\"active\"\n          ui-sref=\"app.article\">\n          Article\n        </a>\n      </li>\n\n      <li class=\"nav-item\">\n        <a class=\"nav-link\"\n          ui-sref-active=\"active\"\n          ui-sref=\"app.profile\">\n          My Profile\n        </a>\n      </li>\n    </ul>\n  </div>\n</nav>\n");
+  $templateCache.put("layout/header.html", "<nav class=\"navbar navbar-light\">\n  <div class=\"container\">\n\n    <a class=\"navbar-brand\"\n      ui-sref=\"app.home\"\n      ng-bind=\"::$ctrl.appName | lowercase\">\n    </a>\n\n    <!-- Show this for logged out users -->\n    <ul class=\"nav navbar-nav pull-xs-right\">\n    <li>\n    {{$ctrl.loginBool}}\n    </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\"\n          ui-sref-active=\"active\"\n          ui-sref=\"app.home\">\n          Home\n        </a>\n      </li>\n\n      <li class=\"nav-item\">\n        <a class=\"nav-link\"\n          ui-sref-active=\"active\"\n          ui-sref=\"app.login\">\n          Sign In\n        </a>\n      </li>\n\n      <li class=\"nav-item\">\n        <a class=\"nav-link\"\n          ui-sref-active=\"active\"\n          ui-sref=\"app.register\">\n          Sign Up\n        </a>\n      </li>\n\n      <li class=\"nav-item\">\n        <a class=\"nav-link\"\n          ng-click=\"$ctrl.logOut()\">\n          Log out\n        </a>\n      </li>\n    </ul>\n  </div>\n</nav>\n");
   $templateCache.put("profile/profile.html", "<div class=\"profile-page\">\n\n  <!-- User\'s basic info & action buttons -->\n  <div class=\"user-info\">\n    <div class=\"container\">\n      <div class=\"row\">\n        <div class=\"col-xs-12 col-md-10 offset-md-1\">\n\n          <img class=\"user-img\" />\n          <h4>BradGreen</h4>\n          <p>I\'m the dude running the Angular team at Google, yo.</p>\n\n          <button class=\"btn btn-sm btn-outline-secondary action-btn\">\n            <i class=\"ion-plus-round\"></i>\n            &nbsp;\n            Follow BradGreen\n          </button>\n\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <!-- Container where User\'s posts & favs are list w/ toggle tabs -->\n  <div class=\"container\">\n    <div class=\"row\">\n\n      <div class=\"col-xs-12 col-md-10 offset-md-1\">\n\n        <!-- Tabs for switching between author articles & favorites -->\n        <div class=\"articles-toggle\">\n          <ul class=\"nav nav-pills outline-active\">\n\n            <li class=\"nav-item\">\n              <a class=\"nav-link active\">\n                My Articles\n              </a>\n            </li>\n\n            <li class=\"nav-item\">\n              <a class=\"nav-link\">\n                Favorited Articles\n              </a>\n            </li>\n\n          </ul>\n        </div>\n\n        <!-- List of articles -->\n        <div class=\"article-preview\">\n          <div class=\"article-meta\">\n            <a href=\"\"><img /></a>\n            <div class=\"info\">\n              <a href=\"\" class=\"author\">BradGreen</a>\n              <span class=\"date\">January 20th</span>\n            </div>\n            <button class=\"btn btn-outline-primary btn-sm pull-xs-right\">\n              <i class=\"ion-heart\"></i> 29\n            </button>\n          </div>\n          <a href=\"\" class=\"preview-link\">\n            <h1>How to build Angular apps that scale</h1>\n            <p>Building web applications is not an easy task. It\'s even hard to make ones that scale.</p>\n            <span>Read more...</span>\n            <ul class=\"tag-list\">\n              <li class=\"tag-default tag-pill tag-outline\">programming</li>\n              <li class=\"tag-default tag-pill tag-outline\">web</li>\n            </ul>\n          </a>\n        </div>\n\n\n      </div>\n\n    <!-- End row & container divs -->\n    </div>\n  </div>\n\n</div>\n");
 }]);
 
@@ -36730,7 +36742,12 @@ function HomeConfig($stateProvider) {
     controller: 'HomeCtrl',
     controllerAs: '$ctrl',
     templateUrl: 'home/home.html',
-    title: 'Home'
+    title: 'Home',
+    resolve: {
+      postPromise: ['Posts', function (Posts) {
+        return Posts.getAll();
+      }]
+    }
   });
 };
 
@@ -36743,16 +36760,52 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var HomeCtrl = function HomeCtrl(AppConstants) {
-  'ngInject';
+var HomeCtrl = function () {
+  HomeCtrl.$inject = ["AppConstants", "Auth", "Posts", "postPromise", "$rootScope"];
+  function HomeCtrl(AppConstants, Auth, Posts, postPromise, $rootScope) {
+    'ngInject';
 
-  _classCallCheck(this, HomeCtrl);
+    _classCallCheck(this, HomeCtrl);
 
-  this.appName = AppConstants.appName;
-};
-HomeCtrl.$inject = ["AppConstants"];
+    this.appName = AppConstants.appName;
+    this._Auth = Auth;
+    this._Posts = Posts;
+    Auth.isLoggedIn();
+    this.isLoggedIn = Auth.isLoggedInBool;
+    console.log('check isloggedin', this.isLoggedIn);
+    this.posts = this._Posts.posts;
+  }
+
+  _createClass(HomeCtrl, [{
+    key: 'addPost',
+    value: function addPost() {
+      // check for empty string
+      if (!this.formData.title || this.formData.title === '') {
+        return;
+      }
+
+      this._Posts.create({
+        title: this.formData.title,
+        link: this.formData.link
+      });
+
+      this.formData.title = '';
+      this.formData.link = '';
+    }
+  }, {
+    key: 'incrementUpvotes',
+    value: function incrementUpvotes(post) {
+      this._Posts.upvote(post);
+      console.log(this.isLoggedIn);
+    }
+  }]);
+
+  return HomeCtrl;
+}();
 
 exports.default = HomeCtrl;
 
@@ -36825,19 +36878,36 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var AppHeaderCtrl = function AppHeaderCtrl(AppConstants) {
-  'ngInject';
+var AppHeaderCtrl = function () {
+  AppHeaderCtrl.$inject = ["AppConstants", "Auth"];
+  function AppHeaderCtrl(AppConstants, Auth) {
+    'ngInject';
 
-  _classCallCheck(this, AppHeaderCtrl);
+    _classCallCheck(this, AppHeaderCtrl);
 
-  this.appName = AppConstants.appName;
-};
-AppHeaderCtrl.$inject = ["AppConstants"];
+    this.appName = AppConstants.appName;
+    this._Auth = Auth;
+    this.loginBool = Auth.model.isLoggedInBool;
+  }
+
+  _createClass(AppHeaderCtrl, [{
+    key: 'logOut',
+    value: function logOut() {
+      this._Auth.logOut();
+      this._Auth.isLoggedInBool = false;
+    }
+  }]);
+
+  return AppHeaderCtrl;
+}();
 
 var AppHeader = {
   controller: AppHeaderCtrl,
+  controllerAs: '$ctrl',
   templateUrl: 'layout/header.html'
 };
 
@@ -36953,13 +37023,113 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Auth = function () {
+  Auth.$inject = ["AppConstants", "$http", "$window", "$rootScope"];
+  function Auth(AppConstants, $http, $window, $rootScope) {
+    'ngInject';
+
+    _classCallCheck(this, Auth);
+
+    this.isLoggedInBool = false;
+    this._AppConstants = AppConstants;
+    this._$http = $http;
+    this._$window = $window;
+    this.model = {
+      isLoggedInBool: true
+    };
+  }
+
+  _createClass(Auth, [{
+    key: 'saveToken',
+    value: function saveToken(token) {
+      this.isLoggedInBool = true;
+      return this._$window.localStorage['flapper-news-token'] = token;
+    }
+  }, {
+    key: 'getToken',
+    value: function getToken() {
+      return this._$window.localStorage['flapper-news-token'];
+    }
+  }, {
+    key: 'isLoggedIn',
+    value: function isLoggedIn() {
+      var token = this.getToken();
+
+      if (token) {
+        var payload = JSON.parse(this._$window.atob(token.split('.')[1]));
+        var res = payload.exp > Date.now() / 1000;
+        this.isLoggedInBool = res;
+        return res;
+      } else {
+        this.isLoggedInBool = false;
+        return false;
+      }
+    }
+  }, {
+    key: 'currentUser',
+    value: function currentUser() {
+      if (this.isLoggedIn()) {
+        var token = this.getToken();
+        var payload = JSON.parse(this._$window.atob(token.split('.')[1]));
+
+        return payload.username;
+      }
+    }
+  }, {
+    key: 'register',
+    value: function register(user) {
+      var _this = this;
+
+      return this._$http.post('/register', user).then(function (res) {
+        _this.saveToken(res.data.token);
+      });
+    }
+  }, {
+    key: 'logIn',
+    value: function logIn(user) {
+      var _this2 = this;
+
+      return this._$http.post('/login', user).then(function (res) {
+        _this2.saveToken(res.data.token);
+      });
+    }
+  }, {
+    key: 'logOut',
+    value: function logOut() {
+      this.isLoggedInBool = false;
+      this.model.isLoggedInBool = false;
+      console.log('logout', this.isLoggedInBool, this.model.isLoggedInBool);
+      this._$window.localStorage.removeItem('flapper-news-token');
+    }
+  }]);
+
+  return Auth;
+}();
+
+exports.default = Auth;
+
+},{}],28:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _angular = require('angular');
 
 var _angular2 = _interopRequireDefault(_angular);
 
-var _user = require('./user.service');
+var _auth = require('./auth.service');
 
-var _user2 = _interopRequireDefault(_user);
+var _auth2 = _interopRequireDefault(_auth);
+
+var _posts = require('./posts.service');
+
+var _posts2 = _interopRequireDefault(_posts);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -36967,12 +37137,16 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var servicesModule = _angular2.default.module('app.services', []);
 
 // Services
+// import UserService from './user.service';
+// servicesModule.service('User', UserService);
 
-servicesModule.service('User', _user2.default);
+servicesModule.service('Auth', _auth2.default);
+
+servicesModule.service('Posts', _posts2.default);
 
 exports.default = servicesModule;
 
-},{"./user.service":28,"angular":3}],28:[function(require,module,exports){
+},{"./auth.service":27,"./posts.service":29,"angular":3}],29:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -36983,40 +37157,74 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var User = function () {
-  User.$inject = ["AppConstants", "$http"];
-  function User(AppConstants, $http) {
+var Posts = function () {
+  Posts.$inject = ["Auth", "$state", "$http"];
+  function Posts(Auth, $state, $http) {
     'ngInject';
 
-    _classCallCheck(this, User);
+    _classCallCheck(this, Posts);
 
-    this._AppConstants = AppConstants;
+    this._Auth = Auth;
     this._$http = $http;
-    this.current = null;
+    this.posts = [];
   }
 
-  _createClass(User, [{
-    key: 'attemptAuth',
-    value: function attemptAuth(type, credentials) {
+  _createClass(Posts, [{
+    key: 'getAll',
+    value: function getAll() {
       var _this = this;
 
-      var route = type === 'login' ? '/login' : '';
-      return this._$http({
-        url: this._AppConstants.api + '/users' + route,
-        method: 'POST',
-        data: {
-          user: credentials
-        }
-      }).then(function (res) {
-        _this.current = res.data.user;
-        return res;
+      return this._$http.get('/posts').success(function (res) {
+        angular.copy(res, _this.posts);
+        console.log('copied', _this.posts);
+      });
+    }
+  }, {
+    key: 'create',
+    value: function create(post) {
+      return this._$http.post('/posts', post, {
+        headers: { Authorization: 'Bearer ' + this._Auth.getToken() }
+      }).success(function (data) {
+        this.posts.push(data);
+      });
+    }
+  }, {
+    key: 'upvote',
+    value: function upvote(post) {
+      return this._$http.put('/posts/' + post._id + '/upvote', null, {
+        headers: { Authorization: 'Bearer ' + this._Auth.getToken() }
+      }).success(function (data) {
+        post.upvotes += 1;
+      });
+    }
+  }, {
+    key: 'get',
+    value: function get(id) {
+      return this._$http.get('/posts/' + id).then(function (res) {
+        return res.data;
+      });
+    }
+  }, {
+    key: 'addComment',
+    value: function addComment(id, comment) {
+      return this._$http.post('/posts/' + id + '/comments', comment, {
+        headers: { Authorization: 'Bearer ' + this._Auth.getToken() }
+      });
+    }
+  }, {
+    key: 'upvoteComment',
+    value: function upvoteComment(post, comment) {
+      return this._$http.put('/posts/' + post._id + '/comments/' + comment._id + '/upvote', null, {
+        headers: { Authorization: 'Bearer ' + this._Auth.getToken() }
+      }).success(function (data) {
+        comment.upvotes += 1;
       });
     }
   }]);
 
-  return User;
+  return Posts;
 }();
 
-exports.default = User;
+exports.default = Posts;
 
 },{}]},{},[4]);

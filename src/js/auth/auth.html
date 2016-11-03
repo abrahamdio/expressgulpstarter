@@ -15,39 +15,50 @@
           </a>
         </p>
         
-        <list-errors errors="$ctrl.errors"></list-errors>
-        
-        <form ng-submit="$ctrl.submitForm()">
-          <fieldset>
+        <div ng-show="$ctrl.errors" class="alert alert-danger row">
+          <span>{{ $ctrl.errors }}</span>
+        </div>
 
-            <fieldset class="form-group" ng-show="$ctrl.authType === 'register'">
-              <input class="form-control form-control-lg"
-                type="text"
-                placeholder="Username"
-                ng-model="$ctrl.formData.username" />
-            </fieldset>
+        <form ng-submit="$ctrl.register()"
+          ng-show="$ctrl.authType === 'register'"
+          style="margin-top:30px;">
+          <h3>{{ $ctrl.title }}</h3>
 
-            <fieldset class="form-group">
-              <input class="form-control form-control-lg"
-                type="email"
-                placeholder="Email"
-                ng-model="$ctrl.formData.email" />
-            </fieldset>
-
-            <fieldset class="form-group">
-              <input class="form-control form-control-lg"
-                type="password"
-                placeholder="Password"
-                ng-model="$ctrl.formData.password" />
-            </fieldset>
-
-            <button class="btn btn-lg btn-primary pull-xs-right"
-              ng-bind="$ctrl.title">
-              Register
-            </button>
-
-          </fieldset>
+          <div class="form-group">
+            <input type="text"
+            class="form-control"
+            placeholder="Username"
+            ng-model="$ctrl.user.username"></input>
+          </div>
+          <div class="form-group">
+            <input type="password"
+            class="form-control"
+            placeholder="Password"
+            ng-model="$ctrl.user.password"></input>
+          </div>
+          <button type="submit" class="btn btn-primary">Register</button>
         </form>
+
+        <form ng-submit="$ctrl.logIn()"
+          ng-show="$ctrl.authType === 'login'"
+          style="margin-top:30px;">
+          <h3>{{ $ctrl.title }}</h3>
+
+          <div class="form-group">
+            <input type="text"
+            class="form-control"
+            placeholder="Username"
+            ng-model="$ctrl.user.username"></input>
+          </div>
+          <div class="form-group">
+            <input type="password"
+            class="form-control"
+            placeholder="Password"
+            ng-model="$ctrl.user.password"></input>
+          </div>
+          <button type="submit" class="btn btn-primary">Log In</button>
+        </form>
+        
       </div>
 
     </div>

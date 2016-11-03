@@ -1,7 +1,7 @@
 const AppConstants = {
-  api: 'http://localhost:3000/api',
+  api: 'http://localhost:3000',
   jwtKey: 'jwtToken',
-  appName: 'Conduit',
+  appName: 'FlapperNews',
 };
 
 export default AppConstants;

@@ -1,24 +1,36 @@
 class AuthCtrl {
-	constructor(User, $state) {
+	constructor(Auth, $state) {
 		'ngInject';
 
-		this._User = User;
+		this._Auth = Auth;
+		this._$state = $state;
+		this.user = {};
+		
 		this.title = $state.current.title;
 		this.authType = $state.current.name.replace('app.', '');
+		this.errors = "";
 	}
 
-	submitForm(){
-		this.isSubmitting = true;
-		this._User.attemptAuth(this.authType, this.formData).then(
-				(res) => {
-					this.isSubmitting = false;
-					console.log(res);
-				},
-				(err) => {
-					this.isSubmitting = false;
-					this.errors = err.data.errors;
-				}
-			);
+	register(){
+	  	this._Auth.register(this.user).then(
+	  		(res) => {
+	  			this._$state.go('app.home');
+	  		},
+	  		(err) => {
+	  			this.errors = err.data.message;
+	  		}
+	  	)
+	}
+
+	logIn(){
+	  	this._Auth.logIn(this.user).then(
+	  		(res) => {
+	  			this._$state.go('app.home');
+	  		},
+	  		(err) => {
+	  			this.errors = err.data.message;
+	  		}
+	  	)
 	}
 }
 
