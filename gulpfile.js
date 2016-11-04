@@ -9,6 +9,8 @@ var rename        = require('gulp-rename');
 var templateCache = require('gulp-angular-templatecache');
 var uglify        = require('gulp-uglify');
 var merge         = require('merge-stream');
+var monof
+
 
 // Where our files are located
 var jsFiles   = "src/js/**/*.js";
@@ -43,6 +45,7 @@ gulp.task('browserify', ['views'], function() {
 gulp.task('html', function() {
   return gulp.src("src/index.html")
       .on('error', interceptErrors)
+      .pipe(rename("index.ejs"))
       .pipe(gulp.dest('./build/'));
 });
 
