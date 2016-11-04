@@ -20,4 +20,4 @@ https://thinkster.io/angularjs-es6-tutorial#setting-up-a-boilerplate-project-for
 
 https://thinkster.io/mean-stack-tutorial
 
-These are two tutorials that I used to create MEAN Stack with Angular ES6 Components and Gulp. 
+These are the two tutorials that I used to create MEAN Stack with Angular ES6 Components and Gulp. 
