@@ -1,5 +1,5 @@
 class HomeCtrl {
-  constructor(AppConstants, Auth, Posts, postPromise, $rootScope) {
+  constructor(AppConstants, Auth, Posts) {
     'ngInject';
 
     this.appName = AppConstants.appName;

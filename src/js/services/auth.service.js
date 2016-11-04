@@ -61,7 +61,6 @@ export default class Auth {
     logOut(){
       this.isLoggedInBool = false;
       this.model.isLoggedInBool = false;
-      console.log('logout', this.isLoggedInBool, this.model.isLoggedInBool);
       this._$window.localStorage.removeItem('flapper-news-token');
     };
 }

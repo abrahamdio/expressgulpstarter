@@ -9,9 +9,9 @@ function HomeConfig($stateProvider) {
     templateUrl: 'home/home.html',
     title: 'Home',
 		resolve: {
-			postPromise: ['Posts', function(Posts){
+			postPromise: function(Posts){
 				return Posts.getAll();
-			}]
+			}
 		}
   });
 

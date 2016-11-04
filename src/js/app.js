@@ -13,6 +13,7 @@ import './components';
 import './home';
 import './profile';
 import './article';
+import './posts';
 import './services';
 import './auth';
 
@@ -26,6 +27,7 @@ const requires = [
   'app.home',
   'app.profile',
   'app.article',
+  'app.posts',
   'app.services',
   'app.auth'
 ];

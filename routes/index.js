@@ -57,6 +57,7 @@ router.get('/posts', function(req, res, next) {
 
 
 router.get('/posts/:post', function(req,res) {
+	console.log('get posts id')
 	req.post.populate('comments', function(err,post){
 		if (err) {return next(err);}
 		res.json(post);
