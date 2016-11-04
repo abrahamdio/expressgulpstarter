@@ -5,9 +5,7 @@ class HomeCtrl {
     this.appName = AppConstants.appName;
     this._Auth = Auth;
     this._Posts = Posts;
-    Auth.isLoggedIn();
-    this.isLoggedIn = Auth.isLoggedInBool;
-    console.log('check isloggedin', this.isLoggedIn)
+    this.isLoggedIn = Auth.isLoggedIn();
     this.posts = this._Posts.posts;
   }
 
@@ -26,7 +24,6 @@ class HomeCtrl {
 
     incrementUpvotes(post){
     	this._Posts.upvote(post);
-        console.log(this.isLoggedIn)
     }
 }
 

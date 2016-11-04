@@ -11,8 +11,6 @@ export default class Posts {
   		return this._$http.get('/posts').success(
         (res) =>{
           angular.copy(res, this.posts);
-          console.log('copied', this.posts)
-
         }
       );
   	}

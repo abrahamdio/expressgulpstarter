@@ -1,12 +1,12 @@
-function ShowAuthed(User){
+function ShowAuthed(Auth){
 	'ngInject';
 
 	return{
 		restrict: 'A',
 		link: function(scope, element, attrs){
-			scope.User = User;
-
-			scope.$watch('User.current', function(val){
+			scope.Auth = Auth;
+			
+			scope.$watch('Auth.isLoggedInBool', function(val){
 				if(val){
 					if (attrs.showAuthed === 'true'){
 						element.css({display:'inherit'})

@@ -1,5 +1,5 @@
 export default class Auth {
-  	constructor(AppConstants, $http, $window, $rootScope) {
+  	constructor(AppConstants, $http, $window) {
     	'ngInject';
       this.isLoggedInBool = false;
     	this._AppConstants = AppConstants;
@@ -20,7 +20,7 @@ export default class Auth {
     }
 
     isLoggedIn(){
-      var token = this.getToken();
+      let token = this.getToken();
 
       if(token){
         let payload = JSON.parse(this._$window.atob(token.split('.')[1]));

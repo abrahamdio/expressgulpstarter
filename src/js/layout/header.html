@@ -9,7 +9,6 @@
     <!-- Show this for logged out users -->
     <ul class="nav navbar-nav pull-xs-right">
     <li>
-    {{$ctrl.loginBool}}
     </li>
       <li class="nav-item">
         <a class="nav-link"
@@ -19,7 +18,8 @@
         </a>
       </li>
 
-      <li class="nav-item">
+      <li class="nav-item"
+        show-authed="false">
         <a class="nav-link"
           ui-sref-active="active"
           ui-sref="app.login">
@@ -27,7 +27,8 @@
         </a>
       </li>
 
-      <li class="nav-item">
+      <li class="nav-item"
+        show-authed="false">
         <a class="nav-link"
           ui-sref-active="active"
           ui-sref="app.register">
@@ -35,7 +36,8 @@
         </a>
       </li>
 
-      <li class="nav-item">
+      <li class="nav-item"
+        show-authed="true">
         <a class="nav-link"
           ng-click="$ctrl.logOut()">
           Log out
