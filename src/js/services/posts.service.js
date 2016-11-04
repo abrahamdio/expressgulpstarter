@@ -18,23 +18,29 @@ export default class Posts {
   	create(post){
   		return this._$http.post('/posts',post, {
   			headers: { Authorization: 'Bearer '+ this._Auth.getToken() }
-  		}).success(function(data){
-  			this.posts.push(data);
-  		});
+  		}).success(
+        (data) => {
+          this.posts.push(data);
+        }
+      );
   	};
 
   	upvote(post){
   		return this._$http.put('/posts/' + post._id + '/upvote', null, {
   			headers: {Authorization: 'Bearer '+ this._Auth.getToken()}
-  		}).success(function(data){
-  			post.upvotes += 1;
-  		});
+  		}).success(
+        (data) => {
+          post.upvotes += 1;
+        }
+      );
   	};
 
   	get(id){
-  		return this._$http.get('/posts/' + id).then(function(res){
-  			return res.data;
-  		});
+  		return this._$http.get('/posts/' + id).then(
+        (res) => {
+          return res.data;
+        }
+      )
   	};
 
   	addComment(id, comment){
@@ -47,8 +53,10 @@ export default class Posts {
   		return this._$http.put('/posts/' + post._id + '/comments/' + comment._id + '/upvote', null, {
   			headers: {Authorization: 'Bearer '+this._Auth.getToken()}
   		})
-  		.success(function(data){
-  			comment.upvotes += 1;
-  		});
+  		.success(
+        (data) => {
+          comment.upvotes += 1;
+        }
+      );
   	}
 }
