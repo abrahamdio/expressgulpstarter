@@ -1,2 +1,5 @@
 node_modules/
+dist/
+build/
+src/js/config/app.templates.js
 npm-debug.log
