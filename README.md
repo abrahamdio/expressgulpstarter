@@ -6,7 +6,7 @@
   npm install
   ```
 ## Running the server
-`npm start` - default to localhost:3000
+`npm start` - default to <http://localhost:3000>
 
 ## Running front end build with Gulp
 `gulp`- Build and watch all files in `src/`
