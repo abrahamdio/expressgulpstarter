@@ -1,7 +1,7 @@
 # MEAN with Gulp Starter Code
 ## Installation
   ```
-  git clone git@github.com:abrahamdio/expressgulpstarter.git
+  git clone git@github.com:abrahamdio/mean-gulp-starter.git
   cd mean-gulp-starter
   npm install
   ```
