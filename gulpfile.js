@@ -73,14 +73,14 @@ gulp.task('build', ['html', 'browserify'], function() {
 
 gulp.task('default', ['html', 'browserify'], function() {
 
-  browserSync.init(['./build/**/**.**'], {
-    server: "./build",
-    port: 4000,
-    notify: false,
-    ui: {
-      port: 4001
-    }
-  });
+  // browserSync.init(['./build/**/**.**'], {
+  //   server: "./build",
+  //   port: 4000,
+  //   notify: false,
+  //   ui: {
+  //     port: 4001
+  //   }
+  // });
 
   gulp.watch("src/index.html", ['html']);
   gulp.watch(viewFiles, ['views']);
