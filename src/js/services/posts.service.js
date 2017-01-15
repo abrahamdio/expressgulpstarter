@@ -8,9 +8,9 @@ export default class Posts {
   	}
   	
   	getAll() {
-  		return this._$http.get('/posts').success(
+  		return this._$http.get('/posts').then(
         (res) =>{
-          angular.copy(res, this.posts);
+          angular.copy(res.data, this.posts);
         }
       );
   	}
@@ -18,9 +18,9 @@ export default class Posts {
   	create(post){
   		return this._$http.post('/posts',post, {
   			headers: { Authorization: 'Bearer '+ this._Auth.getToken() }
-  		}).success(
-        (data) => {
-          this.posts.push(data);
+  		}).then(
+        (res) => {
+          this.posts.push(res.data);
         }
       );
   	};
@@ -28,8 +28,8 @@ export default class Posts {
   	upvote(post){
   		return this._$http.put('/posts/' + post._id + '/upvote', null, {
   			headers: {Authorization: 'Bearer '+ this._Auth.getToken()}
-  		}).success(
-        (data) => {
+  		}).then(
+        (res) => {
           post.upvotes += 1;
         }
       );
@@ -53,8 +53,8 @@ export default class Posts {
   		return this._$http.put('/posts/' + post._id + '/comments/' + comment._id + '/upvote', null, {
   			headers: {Authorization: 'Bearer '+this._Auth.getToken()}
   		})
-  		.success(
-        (data) => {
+  		.then(
+        (res) => {
           comment.upvotes += 1;
         }
       );

@@ -9,7 +9,6 @@ var rename        = require('gulp-rename');
 var templateCache = require('gulp-angular-templatecache');
 var uglify        = require('gulp-uglify');
 var merge         = require('merge-stream');
-var monof
 
 
 // Where our files are located

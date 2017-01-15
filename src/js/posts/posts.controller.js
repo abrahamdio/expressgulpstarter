@@ -6,7 +6,6 @@ class PostsCtrl {
 		this._Posts = Posts;
 		this.isLoggedIn = Auth.isLoggedIn();
 		this.post = post;
-		console.log('post', post)
 	}
 
 	addComment(){
@@ -15,9 +14,9 @@ class PostsCtrl {
 		this._Posts.addComment(this.post._id, {
 			body: this.formData.comment,
 			author: 'user',
-		}).success(
-			(comment) => {
-				this.post.comments.push(comment)
+		}).then(
+			(res) => {
+				this.post.comments.push(res.data)
 			}
 		)
 		this.formData = '';

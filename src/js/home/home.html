@@ -14,7 +14,7 @@
         </span>
     </span>
     <span>
-        <a href="#/posts/{{post._id}}">Comments</a>
+        <a ui-sref="app.posts({id: post._id})">Comments</a>
     </span>
     <span ng-show="post.author">
         posted by <a>{{post.author}}</a> |

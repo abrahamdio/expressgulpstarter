@@ -4,7 +4,7 @@ function PostsConfig($stateProvider, $httpProvider) {
   // Define the routes
   $stateProvider
   .state('app.posts', {
-    url:'/posts/{id}',
+    url:'/posts/:id',
     templateUrl: 'posts/posts.html',
     controller: 'PostsCtrl as $ctrl',
     title: 'Posts',
